@@ -26,17 +26,17 @@ const lists = ref([
   {
     title: 'Button 组件示例',
     description: '使用 componentShow 展示 button.vue 组件',
-    componentPath: './sub/button.vue',
+    componentPath: '../example/button.vue',
   },
   {
     title: 'Input 组件示例',
     description: '使用 componentShow 展示 input.vue 组件',
-    componentPath: './sub/input.vue',
+    componentPath: '../example/input.vue',
   },
   {
     title: 'Link 组件示例',
     description: '使用 componentShow 展示 link.vue 组件',
-    componentPath: './sub/link.vue',
+    componentPath: '../example/link.vue',
   },
 ])
 
