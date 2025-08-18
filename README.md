@@ -1,82 +1,123 @@
-# Vue Components
+# Vue Components 展示系统
 
-一个基于 Vue 3 的轻量级组件库，提供了一系列常用的UI组件，帮助开发者快速构建现代化的Web应用。
+一个基于 Vue 3 的组件展示系统，提供了动态组件预览、源代码查看和代码高亮功能，帮助开发者展示和演示 Vue 组件。
 
 ## 特性
 
-- 🚀 基于 Vue 3 和 Element Plus
-- 📦 开箱即用的高质量组件
-- 🎨 统一的设计风格
-- 📝 详细的文档和示例
-- 🔧 支持按需引入
+- 🚀 基于 Vue 3 + Vite + Element Plus
+- 📦 动态组件加载和预览
+- 🎨 代码语法高亮显示
+- 📝 组件源代码实时查看
+- 🔧 支持多组件展示
+- 💡 响应式设计，适配各种屏幕
+- ⚡ 热模块替换 (HMR) 支持
 
-## 安装
+## 快速开始
 
-```bash
-npm install vue-components --save
-```
-
-## 使用
-
-### 完整引入
-
-```javascript
-import { createApp } from 'vue'
-import App from './App.vue'
-import VueComponents from 'vue-components'
-
-const app = createApp(App)
-app.use(VueComponents)
-app.mount('#app')
-```
-
-### 按需引入
-
-```javascript
-import { createApp } from 'vue'
-import App from './App.vue'
-import { Button, Input } from 'vue-components'
-
-const app = createApp(App)
-app.component(Button.name, Button)
-app.component(Input.name, Input)
-app.mount('#app')
-```
-
-## 组件列表
-
-### Button 按钮
-
-常用的操作按钮，提供多种样式主题、尺寸等。
-
-```vue
-<custom-button type="primary">主要按钮</custom-button>
-<custom-button type="success" plain>成功按钮</custom-button>
-<custom-button type="danger" round>危险按钮</custom-button>
-```
-
-### Input 输入框
-
-接收用户输入的文本数据，支持多种状态和验证。
-
-```vue
-<custom-input v-model="input" placeholder="请输入内容"></custom-input>
-<custom-input v-model="username" label="用户名"></custom-input>
-<custom-input v-model="password" type="password" placeholder="请输入密码"></custom-input>
-```
-
-## 开发
+### 安装依赖
 
 ```bash
-# 安装依赖
 npm install
+```
 
-# 启动示例应用
-npm run example
+### 启动开发服务器
 
-# 构建组件库
+```bash
+npm run dev
+```
+
+### 构建生产版本
+
+```bash
 npm run build
 ```
+
+### 预览构建结果
+
+```bash
+npm run preview
+```
+
+## 项目结构
+
+```
+src/
+├── components/
+│   ├── componentShow.vue    # 组件展示器
+│   └── sub/                 # 示例组件目录
+│       ├── button.vue       # 按钮组件示例
+│       ├── input.vue        # 输入框组件示例
+│       └── link.vue         # 链接组件示例
+├── index.vue                # 主页面
+└── main.js                  # 应用入口
+```
+
+## 核心组件
+
+### ComponentShow 组件展示器
+
+这是系统的核心组件，提供以下功能：
+
+- **动态组件渲染**：根据传入的组件路径动态加载和渲染组件
+- **源代码展示**：实时读取组件源代码并进行语法高亮
+- **交互功能**：复制代码、查看源代码、GitHub编辑等操作
+
+#### 使用方式
+
+```vue
+<ComponentShow
+  :title="组件标题"
+  :description="组件描述"
+  :componentPath="./sub/button.vue"
+/>
+```
+
+#### Props
+
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| title | String | 'Element Plus 组件演示' | 组件标题 |
+| description | String | '' | 组件描述 |
+| componentPath | String | '' | 组件文件路径 |
+
+## 添加新组件
+
+1. 在 `src/components/sub/` 目录下创建新的 Vue 组件文件
+2. 在 `src/index.vue` 的 `lists` 数组中添加新组件的配置：
+
+```javascript
+const lists = ref([
+  // 现有组件...
+  {
+    title: '新组件标题',
+    description: '新组件描述',
+    componentPath: './sub/new-component.vue',
+  },
+])
+```
+
+## 技术栈
+
+- **Vue 3** - 渐进式 JavaScript 框架
+- **Vite** - 下一代前端构建工具
+- **Element Plus** - Vue 3 UI 组件库
+- **Highlight.js** - 代码语法高亮库
+
+## 开发说明
+
+### 代码高亮
+
+系统使用 Highlight.js 提供代码语法高亮功能，支持：
+- XML/HTML 语法高亮
+- 动态重新高亮
+- GitHub 风格的代码样式
+
+### 动态导入
+
+使用 Vite 的动态导入功能实现：
+- 组件的动态加载
+- 源代码的实时读取
+- 热模块替换支持
 
 ## 许可证
 
