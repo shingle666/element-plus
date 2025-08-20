@@ -48,6 +48,9 @@
     
     <!-- 代码展示区块 -->
     <div class="code-section" v-show="showCode">
+      <div class="code-header">
+        <el-text color="#666666" size="small">{{ language }}</el-text>
+      </div>
       <pre><code ref="codeRef" class="language-xml" v-html="displayCode"></code></pre>
     </div>
     
@@ -67,10 +70,12 @@
 
 <script setup>
 import { ref, onMounted, toRefs, computed, watch, shallowRef, nextTick } from 'vue'
-import { Bell, View, Edit, ArrowUp, ArrowDown,CopyDocument } from '@element-plus/icons-vue'
+import { ArrowUp, ArrowDown } from '@element-plus/icons-vue'
 import hljs from 'highlight.js/lib/core'
 import xml from 'highlight.js/lib/languages/xml'
 import 'highlight.js/styles/github.css'
+import { encode } from 'js-base64'
+import { convertVueToPlayground } from '../common/utils.js'
 
 // 定义 props
 const props = defineProps({
@@ -85,6 +90,10 @@ const props = defineProps({
   description: {
     type: String,
     default: ''
+  },
+  language: {
+    type: String,
+    default: 'vue'
   }
 })
 
@@ -95,12 +104,6 @@ const { title, description, componentPath } = toRefs(props)
 const sourceCode = ref('')
 // 动态组件
 const dynamicComponent = shallowRef(null)
-
-const codeIcon = `
-<svg viewBox="0 0 24 24" width="20" height="20">
-  <path fill="currentColor" d="m23 12l-7.071 7.071l-1.414-1.414L20.172 12l-5.657-5.657l1.414-1.414L23 12zM3.828 12l5.657 5.657l-1.414 1.414L1 12l7.071-7.071l1.414 1.414L3.828 12z"></path>
-</svg>
-`
 
 // 当组件路径改变时，动态导入文件内容和组件
 const loadComponentSource = async () => {
@@ -126,6 +129,7 @@ watch(componentPath, loadComponentSource, { immediate: true })
 
 // 注册语言
 hljs.registerLanguage('xml', xml)
+hljs.registerLanguage('vue', xml)
 
 const showCode = ref(false)
 const codeRef = ref(null)
@@ -166,24 +170,15 @@ const copyCode = () => {
   })
 }
 
-const viewSource = () => {
-  showCode.value = true
-  // 等待DOM更新后再执行代码高亮
-  nextTick(() => {
-    if (codeRef.value) {
-      // 移除之前的高亮状态
-      codeRef.value.removeAttribute('data-highlighted')
-      codeRef.value.className = 'language-xml'
-      hljs.highlightElement(codeRef.value)
-    }
-  })
-}
-
 const editOnGithub = () => {
   console.log('在 GitHub 中编辑')
 }
 
 const editOnPlayground = () => {
+  const codeText = getRawCode()
+  const playgroundConfig = convertVueToPlayground(codeText)
+  const playgroundUrl = 'https://element-plus.run/#' + encode(playgroundConfig)
+  window.open(playgroundUrl, '_blank')
   console.log('在 Playground 中编辑')
 }
 
@@ -271,6 +266,7 @@ const toggleCode = () => {
 .code-section {
   background-color: #f8f9fa;
   padding: 0;
+  position: relative;
 }
 
 .code-section pre {
@@ -304,5 +300,11 @@ const toggleCode = () => {
 
 .toggle-section .el-button:hover {
   color: #409eff;
+}
+
+.code-header {
+  position: absolute;
+  top: 2px;
+  right: 10px;
 }
 </style>
