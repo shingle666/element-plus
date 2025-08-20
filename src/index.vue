@@ -25,8 +25,8 @@ import ComponentShow from './components/componentShow.vue'
 const lists = ref([
   {
     title: 'Button 组件示例',
-    description: '使用 componentShow 展示 button.vue 组件',
-    componentPath: '../example/button.vue',
+    description: '使用 componentShow 展示 button 组件 type 类型 使用示例',
+    componentPath: '../example/button/type.vue',
   },
   {
     title: 'Input 组件示例',
