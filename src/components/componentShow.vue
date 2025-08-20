@@ -71,6 +71,7 @@
 <script setup>
 import { ref, onMounted, toRefs, computed, watch, shallowRef, nextTick } from 'vue'
 import { ArrowUp, ArrowDown } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 import hljs from 'highlight.js/lib/core'
 import xml from 'highlight.js/lib/languages/xml'
 import 'highlight.js/styles/github.css'
@@ -170,8 +171,37 @@ const copyCode = () => {
   })
 }
 
+// GitHub 配置
+const githubConfig = {
+  // 默认配置，可以通过环境变量或配置文件覆盖
+  repo: import.meta.env.VITE_GITHUB_REPO || 'https://github.com/your-username/vue-components',
+  branch: import.meta.env.VITE_GITHUB_BRANCH || 'main'
+}
+
 const editOnGithub = () => {
-  console.log('在 GitHub 中编辑')
+  if (!componentPath.value) {
+    ElMessage.warning('无法获取组件路径，无法在 GitHub 中编辑')
+    return
+  }
+
+  try {
+    // 移除路径开头的 '../' 或 './' 并构建完整的文件路径
+    const cleanPath = componentPath.value.replace(/^\.\.?\//, '')
+    const fullPath = cleanPath.startsWith('src/') ? cleanPath : `src/${cleanPath}`
+    
+    // 构建 GitHub 编辑 URL
+    const editUrl = `${githubConfig.repo}/edit/${githubConfig.branch}/${fullPath}`
+    
+    // 在新标签页中打开 GitHub 编辑页面
+    window.open(editUrl, '_blank')
+    console.log('在 GitHub 中编辑:', editUrl)
+    
+    // 可选：显示成功提示
+    ElMessage.success('正在跳转到 GitHub 编辑页面...')
+  } catch (error) {
+    console.error('打开 GitHub 编辑页面失败:', error)
+    ElMessage.error('打开 GitHub 编辑页面失败，请检查配置')
+  }
 }
 
 const editOnPlayground = () => {
@@ -179,7 +209,6 @@ const editOnPlayground = () => {
   const playgroundConfig = convertVueToPlayground(codeText)
   const playgroundUrl = 'https://element-plus.run/#' + encode(playgroundConfig)
   window.open(playgroundUrl, '_blank')
-  console.log('在 Playground 中编辑')
 }
 
 const toggleCode = () => {
