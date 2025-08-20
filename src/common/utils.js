@@ -125,7 +125,10 @@ export async function convertVueFileToPlayground(filePath) {
  * @returns {string} - Vue Playground URL
  */
 export function generatePlaygroundUrl(playgroundJson) {
-  const encoded = btoa(unescape(encodeURIComponent(playgroundJson)));
+  const encoded = btoa(encodeURIComponent(playgroundJson).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+    return String.fromCharCode(parseInt(p1, 16));
+  }));
+  
   return `https://play.vuejs.org/#${encoded}`;
 }
 
