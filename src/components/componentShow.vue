@@ -174,7 +174,7 @@ const copyCode = () => {
 // GitHub 配置
 const githubConfig = {
   // 默认配置，可以通过环境变量或配置文件覆盖
-  repo: import.meta.env.VITE_GITHUB_REPO || 'https://github.com/your-username/vue-components',
+  repo: import.meta.env.VITE_GITHUB_REPO || 'https://github.com/shingle666/element-plus',
   branch: import.meta.env.VITE_GITHUB_BRANCH || 'main'
 }
 
